@@ -34,7 +34,7 @@
 		066117DD1A52BD3B00F49F91 /* TaskModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskModel.swift; sourceTree = "<group>"; };
 		066117DF1A52C4FA00F49F91 /* TaskDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskDetailViewController.swift; sourceTree = "<group>"; };
 		0663CF811A5D83DA00670DEA /* addTaskViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addTaskViewController.swift; sourceTree = "<group>"; };
-		0675A1971A5B091F00EB5F23 /* TaskCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskCell.swift; sourceTree = "<group>"; };
+		0675A1971A5B091F00EB5F23 /* TaskCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TaskCell.swift; path = ../TaskCell.swift; sourceTree = "<group>"; };
 		069A3D7E1A3F4A1C008C1D00 /* Taskit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taskit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		069A3D821A3F4A1C008C1D00 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		069A3D831A3F4A1C008C1D00 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -69,7 +69,6 @@
 		069A3D751A3F4A1C008C1D00 = {
 			isa = PBXGroup;
 			children = (
-				0675A1971A5B091F00EB5F23 /* TaskCell.swift */,
 				069A3D801A3F4A1C008C1D00 /* Taskit */,
 				069A3D961A3F4A1C008C1D00 /* TaskitTests */,
 				069A3D7F1A3F4A1C008C1D00 /* Products */,
@@ -88,6 +87,7 @@
 		069A3D801A3F4A1C008C1D00 /* Taskit */ = {
 			isa = PBXGroup;
 			children = (
+				0675A1971A5B091F00EB5F23 /* TaskCell.swift */,
 				069A3D831A3F4A1C008C1D00 /* AppDelegate.swift */,
 				069A3D851A3F4A1C008C1D00 /* ViewController.swift */,
 				066117DF1A52C4FA00F49F91 /* TaskDetailViewController.swift */,

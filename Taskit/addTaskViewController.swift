@@ -10,6 +10,14 @@ import UIKit
 
 class addTaskViewController: UIViewController {
 
+    /*  This class is used to handle the adding of tasks via the add tasks screen */
+    
+    var mainVC: ViewController!
+    
+    @IBOutlet weak var taskTextField: UITextField!
+    @IBOutlet weak var subtaskTextField: UITextField!
+    @IBOutlet weak var dueDatePicker: UIDatePicker!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -20,10 +28,17 @@ class addTaskViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+  
+    // This next function is called when the cancel button on the add tasks screen is tapped.  The segue to the was showTaskAdd which was a modal so the cancel button effectively dismisses itself rather than need in to call on the navigationController to do it
 
     @IBAction func cancelButtonTapped(sender: UIButton) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
    
+    @IBAction func addTaskButtonTapped(sender: UIButton) {
+        
+    var task = TaskModel(task: taskTextField.text, subTask: subtaskTextField.text, date: dueDatePicker.date)
+        mainVC?.taskArray.append(task)
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
 }

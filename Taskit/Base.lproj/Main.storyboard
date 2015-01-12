@@ -121,7 +121,11 @@
                                 <action selector="cancelButtonTapped:" destination="LSr-8B-mWh" id="TI9-VN-lYA"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Done" id="uXd-KA-Ro3"/>
+                        <barButtonItem key="rightBarButtonItem" title="Done" id="uXd-KA-Ro3">
+                            <connections>
+                                <action selector="doneBarButtonItemPressed:" destination="LSr-8B-mWh" id="kZ3-WU-lhd"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -165,12 +169,6 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="jmp-I7-A73">
-                                <rect key="frame" x="0.0" y="331" width="280" height="162"/>
-                                <date key="date" timeIntervalSinceReferenceDate="442337051.52843201">
-                                    <!--2015-01-07 15:24:11 +0000-->
-                                </date>
-                            </datePicker>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Task" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CVN-Gt-Mhx">
                                 <rect key="frame" x="33" y="91" width="35" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -194,10 +192,24 @@
                                 <state key="normal" title="Add Task">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="addTaskButtonTapped:" destination="VyB-YI-ui5" eventType="touchUpInside" id="M3o-th-Dsv"/>
+                                </connections>
                             </button>
+                            <datePicker contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="jmp-I7-A73">
+                                <rect key="frame" x="0.0" y="331" width="280" height="162"/>
+                                <date key="date" timeIntervalSinceReferenceDate="442337051.52843201">
+                                    <!--2015-01-07 15:24:11 +0000-->
+                                </date>
+                            </datePicker>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <outlet property="dueDatePicker" destination="jmp-I7-A73" id="dFi-pb-syc"/>
+                        <outlet property="subtaskTextField" destination="DUe-OG-bje" id="KMb-DF-NaJ"/>
+                        <outlet property="taskTextField" destination="uXP-kQ-BKR" id="tCe-Uj-2YW"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="i4r-Pg-qB5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
