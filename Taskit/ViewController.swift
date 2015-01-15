@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView!
+    
     var taskArray:[TaskModel] = []
     
     override func viewDidLoad() {
@@ -35,11 +36,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         self.tableView.reloadData()
         
-        
     }
+    
+    // this function is called everytime tableView is displayed.  It sorts the taskArray before reloading all the data.
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        
+        taskArray = taskArray.sorted {
+        (taskOne:TaskModel, taskTwo:TaskModel) -> Bool in
+                return taskOne.date.timeIntervalSince1970 < taskTwo.date.timeIntervalSince1970
+        }
+        
         self.tableView.reloadData()
     }
     
@@ -50,7 +58,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     /* The function below is called whenever the user taps an item it the tableView and the segue showTaskDetail is called.
     It is used to ensure that the receiving screen i.e. Detail is populated by the information
-    held in the tapped item.  Tis information is passed over by the instance of the detailTaskModel in the TaskDetailViewController */
+    held in the tapped item.  This information is passed over by the instance of the detailTaskModel in the TaskDetailViewController at the same time an instance of the main viewcontroller is passed to the TaskDetailViewController so that it has access to the taskArray enabling the user to make changes.
+    
+    In addition if the user taps on the Add button on the tableView there wil be a segue (showAddTask) to the Add new task screen and a copy of the main view controller will be passed to the addTaskViewController so that it can have append a row to the taskArray.  */
     
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -67,7 +77,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    /* This next function is called when the user taps the add task button on the nav bar of the Tasks screen */
+    /* This next function is called when the user taps the add task button on the nav bar of the Tasks screen.  It causes a segue to the addTaskViewController so that a new task can be added */
     
     @IBAction func addButtonTapped(sender: UIBarButtonItem) {
         self.performSegueWithIdentifier("showTaskAdd", sender: self)
@@ -91,7 +101,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return cell
     }
     
-    // This next function is required by the UITableViewDelegate protocol.  It is called whenever the user taps a table entry activate the segue showTaskDetail.  Note the prepareForSegue function above which is used to populate the target view
+    // This next function is required by the UITableViewDelegate protocol.  It is called whenever the user taps a table entry to activate the segue showTaskDetail.  Note the prepareForSegue function above which is used to populate the target view
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         println(indexPath.row)
