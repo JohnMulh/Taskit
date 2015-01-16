@@ -39,8 +39,8 @@ class addTaskViewController: UIViewController {
 
         // This function is called when the "Add task" button is pressed on the Add Task screen.  That data inserted in the fields on that screen by the user are written into a TaskModel variable and this is used to append a row to the taskArray in the main viewcontroller screen.
         
-    var task = TaskModel(task: taskTextField.text, subTask: subtaskTextField.text, date: dueDatePicker.date)
-        mainVC?.taskArray.append(task)
+        var task = TaskModel(task: taskTextField.text, subTask: subtaskTextField.text, date: dueDatePicker.date, completed: false)
+        mainVC?.baseArray[0].append(task)
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 }

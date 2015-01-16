@@ -49,8 +49,8 @@ class TaskDetailViewController: UIViewController {
     // The function below is called when the user taps the "Done" button on the Detail task screen. Any data that has been amended into the fields on the screen is written into a TaskModel variable and this is then written to the task array in the main viewcontroller's tableView for the specific row that had been tapped by the user.
     
     @IBAction func doneBarButtonItemPressed(sender: UIBarButtonItem) {
-        var task = TaskModel(task: taskTextField.text, subTask: subTaskTextField.text, date: dueDatePicker.date)
-        mainVC.taskArray[mainVC.tableView.indexPathForSelectedRow()!.row] = task
+        var task = TaskModel(task: taskTextField.text, subTask: subTaskTextField.text, date: dueDatePicker.date, completed: false)
+        mainVC.baseArray[0][mainVC.tableView.indexPathForSelectedRow()!.row] = task
         self.navigationController?.popViewControllerAnimated(true)
     }
     
