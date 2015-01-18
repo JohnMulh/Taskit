@@ -7,58 +7,34 @@
 //
 
 import UIKit
+import CoreData
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, NSFetchedResultsControllerDelegate{
     
     @IBOutlet weak var tableView: UITableView!
+    
+    let managedObjectContext = (UIApplication.sharedApplication().delegate as AppDelegate).managedObjectContext!
+    var fetchedResultsController:NSFetchedResultsController = NSFetchedResultsController()
     
 //    var taskArray:[TaskModel] = []
     var baseArray:[[TaskModel]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // nect line is in one sense redundant as the same occurs in the getFetchedResultsController function that is being called i.e. getFetchedResultsContoller on its one would suffice
         
+        fetchedResultsController = getFetchedResultsController()
+        fetchedResultsController.delegate = self
+        fetchedResultsController.performFetch(nil)
         
-        // Create an array based on the TaskModel struct to hold items to be shown used in the list.
-        
-        let date1 = Date.from(year: 2014, month: 05, day: 20)
-        let date2 = Date.from(year: 2014, month: 03, day: 3)
-        let date3 = Date.from(year: 2014, month: 12, day: 13)
-        let date4 = Date.from(year: 2015, month: 01, day: 03)
-        
-        let task1 = TaskModel(task: "Learn French", subTask: "Verbs", date: date1, completed: false)
-        let task2 = TaskModel(task: "Eat dinner", subTask: "Burgers", date: date2, completed: false)
-        
-        // Create taskArray using tasks 1 & 2 constants and then add in two additional tasks
-        // using the 'in-line' approach
-        
-        let taskArray = [task1, task2, TaskModel(task: "Gym", subTask: "Leg Day", date: date3, completed: false), TaskModel(task: "Write Program", subTask: "SubRoutines", date: date4, completed: false)]
-
-        
-        var completedArray = [TaskModel(task: "Code", subTask: "Task Project", date: date2, completed: true)]
-        baseArray = [taskArray, completedArray]
-        
-     
-        
-        
-        // ensure tableView is refreshed every time viewDidLoad is called
-        
-        self.tableView.reloadData()
         
     }
     
-    // this function is called everytime tableView is displayed.  It sorts the taskArray before reloading all the data.
+    // this function is no longer used because the controllerDidChangeContent is now updating the tableView every time there is a change in the data
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        baseArray[0] = baseArray[0].sorted {
-        (taskOne:TaskModel, taskTwo:TaskModel) -> Bool in
-                return taskOne.date.timeIntervalSince1970 < taskTwo.date.timeIntervalSince1970
-        }
-        
-        self.tableView.reloadData()
-    }
+   }
     
     
     override func didReceiveMemoryWarning() {
@@ -77,13 +53,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if segue.identifier == "showTaskDetail" {
             let detailVC: TaskDetailViewController = segue.destinationViewController as TaskDetailViewController
             let indexPath = self.tableView.indexPathForSelectedRow()
-            let thisTask = baseArray[indexPath!.section][indexPath!.row]
+            let thisTask = fetchedResultsController.objectAtIndexPath(indexPath!) as TaskModel
             detailVC.detailTaskModel = thisTask
-            detailVC.mainVC = self
         }
         else if segue.identifier == "showTaskAdd" {
            let addTaskVC:addTaskViewController = segue.destinationViewController as addTaskViewController
-            addTaskVC.mainVC = self
+ 
         }
     }
     
@@ -100,21 +75,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return baseArray.count
+        return fetchedResultsController.sections!.count
     }
    // The second function indicates the number of rows in a section of the tableView that needs to be handled
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return baseArray[section].count
+        return fetchedResultsController.sections![section].numberOfObjects
     }
-    // This third function is used when the user scrolls the tableView.  It indicates identifies the item in the baseArray that needs to be retrieved by its section and row.  This item is then used to update the various labels fields in an instance of TaskCell and return the information so that it can be displayed by reusing a tableView entry that is no longer needed because it has scrolled off the screen
+    // This third function is used when the user scrolls the tableView.  It indicates identifies the item in  that needs to be retrieved by its section and row.  This item is then used to update the various labels fields in an instance of TaskCell and return the information so that it can be displayed by reusing a tableView entry that is no longer needed because it has scrolled off the screen
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let thisTask = baseArray[indexPath.section][indexPath.row]
+        let thisTask = fetchedResultsController.objectAtIndexPath(indexPath) as TaskModel
         var cell: TaskCell = tableView.dequeueReusableCellWithIdentifier("myCell") as TaskCell
         cell.taskLabel.text = thisTask.task
         cell.dateLabel.text = Date.toString(date: thisTask.date)
-        cell.descriptionLabel.text = thisTask.subTask
+        cell.descriptionLabel.text = thisTask.subtask
         return cell
     }
     
@@ -148,23 +123,49 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     // This function is used to allow the user to swipe across the item in the tableView. When the user taps the resulting Delete the task will be deleted from the relevant section and added to the other one.
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        let thisTask = baseArray[indexPath.section][indexPath.row]
+        
+        // First the FetchedResultsController is used to access the TaskModel instance
+        
+        let thisTask = fetchedResultsController.objectAtIndexPath(indexPath) as TaskModel
+        
      // this part of the function changes the completed status of an item in the To Do (section 0) section and adds the changed item to the baseArray
+        
         if indexPath.section == 0 {
-        var newTask = TaskModel(task: thisTask.task, subTask: thisTask.subTask, date: thisTask.date, completed: true)
-            baseArray[1].append(newTask)
+       thisTask.completed = true
         }
      // this part of the function changes the completed status of an item in the Completed (section 1) section and adds the changed item to the baseArray
+            
         else {
-        var newTask = TaskModel(task: thisTask.task, subTask: thisTask.subTask, date: thisTask.date, completed: false)
-            baseArray[0].append(newTask)
+        thisTask.completed = false
 
         }
         
-    // this part of the function removes the item that has been selected from the baseArray and then reloads the tableView
+    // the function saveContext() is then called to save the changes
         
-        baseArray[indexPath.section].removeAtIndex(indexPath.row)
+        (UIApplication.sharedApplication().delegate as AppDelegate).saveContext()
+    }
+    
+    // Helper functions
+    
+    func taskFetchRequest() -> NSFetchRequest {
+        let fetchRequest = NSFetchRequest(entityName: "TaskModel")
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: true)
+        let completedDescriptor = NSSortDescriptor(key: "completed", ascending: true)
+        fetchRequest.sortDescriptors = [completedDescriptor, sortDescriptor]
+        return fetchRequest
+    }
+    
+    func getFetchedResultsController() -> NSFetchedResultsController {
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: taskFetchRequest(), managedObjectContext: managedObjectContext, sectionNameKeyPath: "completed", cacheName: nil)
+        return fetchedResultsController
+    }
+    
+    // NSFetchedResultsControllerDelegate
+    // This function is called when the NSFetchedResults controller detects changes made in the CoreData stack. Each time it detects changes, we want to reload the information in the tableView
+    
+     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         tableView.reloadData()
+    
     }
 }
 

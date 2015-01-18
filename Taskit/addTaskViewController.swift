@@ -7,12 +7,12 @@
 //
 
 import UIKit
+import CoreData
 
 class addTaskViewController: UIViewController {
 
     /*  This class is used to handle the adding of tasks via the add tasks screen */
     
-    var mainVC: ViewController!
     
     @IBOutlet weak var taskTextField: UITextField!
     @IBOutlet weak var subtaskTextField: UITextField!
@@ -37,10 +37,28 @@ class addTaskViewController: UIViewController {
    
     @IBAction func addTaskButtonTapped(sender: UIButton) {
 
-        // This function is called when the "Add task" button is pressed on the Add Task screen.  That data inserted in the fields on that screen by the user are written into a TaskModel variable and this is used to append a row to the taskArray in the main viewcontroller screen.
+        // This function is called when the "Add task" button is pressed on the Add Task screen.  That data inserted in the fields on that screen by the user are written into a TaskModel variable and this is used to update the CoreData entity.
         
-        var task = TaskModel(task: taskTextField.text, subTask: subtaskTextField.text, date: dueDatePicker.date, completed: false)
-        mainVC?.baseArray[0].append(task)
+        let appDelegate = (UIApplication.sharedApplication().delegate as AppDelegate)
+        let managedObjectContext = appDelegate.managedObjectContext
+        let entityDescription = NSEntityDescription.entityForName("TaskModel", inManagedObjectContext: managedObjectContext!)
+        
+        let task = TaskModel(entity: entityDescription!, insertIntoManagedObjectContext: managedObjectContext!)
+        task.task = taskTextField.text
+        task.subtask = subtaskTextField.text
+        task.date = dueDatePicker.date
+        task.completed = false
+        
+        appDelegate.saveContext()
+        
+        var request = NSFetchRequest(entityName: "TaskModel")
+        var error:NSError? = nil
+        
+        var results:NSArray = managedObjectContext!.executeFetchRequest(request, error: &error)!
+        
+        for res in results {
+            println(res)
+        }
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 }

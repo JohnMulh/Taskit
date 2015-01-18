@@ -2,15 +2,20 @@
 //  TaskModel.swift
 //  Taskit
 //
-//  Created by John Mulholland on 30/12/2014.
-//  Copyright (c) 2014 John Mulholland. All rights reserved.
+//  Created by John Mulholland on 16/01/2015.
+//  Copyright (c) 2015 John Mulholland. All rights reserved.
 //
 
 import Foundation
+import CoreData
 
-struct TaskModel {
-    var task:String
-    var subTask:String
-    var date:NSDate
-    var completed:Bool
+@objc(TaskModel)
+
+class TaskModel: NSManagedObject {
+
+    @NSManaged var task: String
+    @NSManaged var subtask: String
+    @NSManaged var date: NSDate
+    @NSManaged var completed: NSNumber
+
 }

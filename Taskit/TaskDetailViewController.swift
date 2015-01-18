@@ -18,7 +18,6 @@ class TaskDetailViewController: UIViewController {
     */
     
     var detailTaskModel: TaskModel!
-    var mainVC:ViewController!
     
     @IBOutlet weak var dueDatePicker: UIDatePicker!
     @IBOutlet weak var taskTextField: UITextField!
@@ -31,7 +30,7 @@ class TaskDetailViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         self.taskTextField.text = detailTaskModel.task
-        self.subTaskTextField.text = detailTaskModel.subTask
+        self.subTaskTextField.text = detailTaskModel.subtask
         self.dueDatePicker.date = detailTaskModel.date
     }
     
@@ -49,8 +48,11 @@ class TaskDetailViewController: UIViewController {
     // The function below is called when the user taps the "Done" button on the Detail task screen. Any data that has been amended into the fields on the screen is written into a TaskModel variable and this is then written to the task array in the main viewcontroller's tableView for the specific row that had been tapped by the user.
     
     @IBAction func doneBarButtonItemPressed(sender: UIBarButtonItem) {
-        var task = TaskModel(task: taskTextField.text, subTask: subTaskTextField.text, date: dueDatePicker.date, completed: false)
-        mainVC.baseArray[0][mainVC.tableView.indexPathForSelectedRow()!.row] = task
+        let appDelegate = (UIApplication.sharedApplication().delegate as AppDelegate)
+        detailTaskModel.task = taskTextField.text
+        detailTaskModel.subtask = subTaskTextField.text
+        detailTaskModel.date = dueDatePicker.date
+        appDelegate.saveContext()
         self.navigationController?.popViewControllerAnimated(true)
     }
     
