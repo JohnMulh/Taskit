@@ -14,7 +14,7 @@ class TaskDetailViewController: UIViewController {
     
     The relevant label and date picker fields are attached to this class via the IBOutlets.
     
-    It also sets up an instance of the struct TaskModel which is used as a conduit during the segue showTaskDetail to make the information in the tapped cell in the Tasks screen available to the Detail  view.
+    It also sets up an instance of the TaskModel defined in the TaskModel class set up by the Core Data TaskitModel.xcdatamodeld.
     */
     
     var detailTaskModel: TaskModel!
@@ -45,7 +45,7 @@ class TaskDetailViewController: UIViewController {
         self.navigationController?.popViewControllerAnimated(true)
     }
     
-    // The function below is called when the user taps the "Done" button on the Detail task screen. Any data that has been amended into the fields on the screen is written into a TaskModel variable and this is then written to the task array in the main viewcontroller's tableView for the specific row that had been tapped by the user.
+    // The function below is called when the user taps the "Done" button on the Detail task screen. Any data that has been amended into the fields on the screen is written into the Core Data TaskModel variable  and saved by  appDelegate.saveContext.
     
     @IBAction func doneBarButtonItemPressed(sender: UIBarButtonItem) {
         let appDelegate = (UIApplication.sharedApplication().delegate as AppDelegate)
